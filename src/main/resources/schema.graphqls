@@ -1,0 +1,32 @@
+type Film @extends @key(fields: "id") {
+    id: ID! @external
+    reviews: [Review] @requires(fields: "id")
+}
+
+type Review @key(fields: "id") {
+    id: ID!
+    text: String!
+    user: User! @provides(fields: "id name")
+    filmId: ID!
+}
+
+type User @extends @key(fields: "id") {
+    id: ID! @external
+    name: String! @external
+    reviews: [Review] @requires(fields: "id")
+}
+
+input InputReview {
+    text: String!
+    userName: String!
+    filmId: ID!
+    userId: ID!
+}
+
+type Query @extends {
+    getReviewById(id: ID!): Review
+}
+
+type Mutation @extends {
+    putReview(review: InputReview!): String
+}
